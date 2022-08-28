@@ -11,7 +11,6 @@ export default function App() {
   {
     setPickedNumber(data);
     setScreen(<GameScreen value_entered={data}></GameScreen>)
-    
   }
   return (
     <LinearGradient colors={['#4e0329', '#ddb52f']} style={styles.rootScreen}>
