@@ -12,8 +12,8 @@ const styles=StyleSheet.create({
     title:
     {
       fontSize:24,
-      color:color.accent500,
-      borderColor:color.accent500,
+      color:'white',
+      borderColor:'white',
       fontWeight:'bold',
       borderWidth:3,
       textAlign:'center',

@@ -1,27 +1,64 @@
-import { StyleSheet,View, Text } from 'react-native'
+import { StyleSheet,View, Text, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Title from '../UI/Title'
 import NumberContainer from '../components/NumberContainer'
-function generateRandomBetween(min, max, exclude) {
+import PrimaryButton from '../UI/PrimaryButton'
+let minBoundary=1
+  let maxBoundary=100
+function generateRandomBetween(min, max) {
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
 
-  if (rndNum === exclude) {
-    return generateRandomBetween(min, max, exclude);
-  } else {
-    return rndNum;
-  }
+  return rndNum;
 }
+
 const GameScreen = ({value_entered}) => {
   const initialGuess=generateRandomBetween(1,100,value_entered);
   const [currGuess,setCurrGuess]=useState(initialGuess);
+  let currValue=initialGuess;
+  
+
+function nextGuessHandler (direction)
+{ 
+ 
+  if(direction=='lower' && value_entered>maxBoundary || direction=='higher' && value_entered<minBoundary)
+  {
+    Alert.alert(
+      "Alert Title",
+    "You have cheated in the game",
+    [
+      
+      { text: "Sorry!",style:'cancel'}
+    ]
+      );
+      return;
+  }
+  console.log(minBoundary+" "+maxBoundary);
+  if(direction=='lower')
+  {
+    maxBoundary=currGuess;
+    currValue=generateRandomBetween(minBoundary,currGuess-1);
+  }
+  else
+  {
+    minBoundary=currGuess;
+    currValue=generateRandomBetween(currGuess+1,maxBoundary);
+  }
+  setCurrGuess(currValue);
+  if(currGuess==value_entered)
+  Alert.alert("Huh I won Bitch",{text:"Fine!!!!",style:'destructive'})
+
+
+}
   return (
     <View style={styles.screen}>
      <Title titleText="Opponent's Guess"></Title>
      <NumberContainer Guessed_Number={currGuess}></NumberContainer>
      <View>
       <Text>Higher or Lower</Text>
-      <Text>+</Text>
-      <Text>-</Text>
+      <View style={{flexDirection:'row'}}>
+      <PrimaryButton onPress={nextGuessHandler.bind(this,"lower")}>-</PrimaryButton>
+      <PrimaryButton onPress={nextGuessHandler.bind(this,"higher")}>+</PrimaryButton>
+      </View>
      </View>
     </View>
   )
