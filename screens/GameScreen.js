@@ -1,5 +1,5 @@
 import { StyleSheet,View, Text, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../UI/Title'
 import NumberContainer from '../components/NumberContainer'
 import PrimaryButton from '../UI/PrimaryButton'
@@ -11,7 +11,7 @@ function generateRandomBetween(min, max) {
   return rndNum;
 }
 
-const GameScreen = ({value_entered}) => {
+const GameScreen = ({value_entered,onGameOver}) => {
   const initialGuess=generateRandomBetween(1,100,value_entered);
   const [currGuess,setCurrGuess]=useState(initialGuess);
   let currValue=initialGuess;
@@ -44,12 +44,21 @@ function nextGuessHandler (direction)
     currValue=generateRandomBetween(currGuess+1,maxBoundary);
   }
   setCurrGuess(currValue);
-  if(currGuess==value_entered)
-  Alert.alert("Huh I won Bitch",{text:"Fine!!!!",style:'destructive'})
 
+ 
 
 }
+useEffect(()=>{
+  if(currGuess==value_entered)
+  {
+    Alert.alert( "Alert Title",
+    "Huh I won Bitch",
+    [{text:"Fine!!!!",style:'destructive',onPress:()=>{onGameOver()}}])
+    onGameOver();
+  }
+},[currGuess,value_entered,onGameOver])
   return (
+   
     <View style={styles.screen}>
      <Title titleText="Opponent's Guess"></Title>
      <NumberContainer Guessed_Number={currGuess}></NumberContainer>
